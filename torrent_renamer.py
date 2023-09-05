@@ -36,7 +36,7 @@ def clean_filename(filename):
         ('www atomohd care', ''),
         ('[Wolfmax4k com]', ''), ('[Wolfmax com]', ''), ('(wolfmax com]', ''), ('(wolfmax COM]', ''),
         ('[depechemode13]', ''), ('CartmanGold', ''), ('-Bryan_122', ''), ('yamil', ''),
-        ('anos','años'), ('ano', 'año'),
+        (' anos ', ' años '), (' ano ', ' año '),
         ('2032', '2023'),
         ('Caap', 'Cap'),
         ('Castellano', 'Esp'),
@@ -51,7 +51,7 @@ def clean_filename(filename):
         ('[Blurayrip]', '[Bluray]'), ('Bluray', '[Bluray]'), ('BLuray', '[Bluray]'),
         ('[[Bluray]rip]', '[Bluray]'), (' rip[', ' ['),
         ('WEB-DL', '[WEB-DL]'), ('WEBDL', '[WEB-DL]'),
-        (']p]', ']'), ('] [', ']['), ('[ ', '['), ('] ', ']'), ('[[', '['), (']]', ']'), ('pp', ''),('  ',' '), ('   ',' '), ('  (',' ('), (')  ',') '),
+        (']p]', ']'), ('] [', ']['), ('[ ', '['), ('] ', ']'), ('[[', '['), (']]', ']'), ('pp', ''),
         ('[Bluray][Esp]', '[Bluray][480p][Esp]'),
         ('[HDTV][Cap', '[HDTV][480p][Cap'),
         ('[HDTC][Cap', '[HDTC][480p][Cap'),
@@ -61,11 +61,16 @@ def clean_filename(filename):
     cleaned_filename = filename
     for pattern, replacement in patterns:
         cleaned_filename = cleaned_filename.replace(pattern, replacement)
-
     # Eliminar espacios en blanco adicionales al principio y al final
     cleaned_filename = cleaned_filename.strip()
-    # Eliminar el texto entre parentesis
+    # Eliminar los paréntesis al principio del nombre del archivo
+    cleaned_filename = re.sub(r'^\(([^)]*)\)', '\\1', cleaned_filename)
+    # Eliminar el texto entre paréntesis, excepto si contiene números
     cleaned_filename = re.sub(r'\((?!\d+\))[^)]*\)', '', cleaned_filename)
+    # Eliminar múltiples espacios en blanco (cualquier tipo) consecutivos y reemplazarlos por un solo espacio
+    cleaned_filename = re.sub(r'\s+', ' ', cleaned_filename, flags=re.UNICODE)
+    # Eliminar espacios en blanco adicionales entre palabras
+    cleaned_filename = ' '.join(cleaned_filename.split())
     # Eliminar el último caracter si es un ']'
     if cleaned_filename.endswith(']['):
         cleaned_filename = cleaned_filename[:-1]
@@ -128,7 +133,7 @@ def rename_and_copy_torrents(source_folder, dest_folder, torrents_filename, medi
     program_dir = os.path.dirname(os.path.abspath(__file__))
 
     # Escribir los nombres de los archivos .torrent (sin la extensión) en el archivo torrents_filename
-    with open(os.path.join(program_dir, f'{torrents_filename}'), 'w', encoding='utf-8') as torrents_file:
+    with open(os.path.join(program_dir, f'{torrents_filename}'), 'w', encoding='ISO-8859-1') as torrents_file:
         for torrent_name in torrent_names:
             torrents_file.write(torrent_name + '\n')
 
@@ -136,7 +141,7 @@ def rename_and_copy_torrents(source_folder, dest_folder, torrents_filename, medi
         f"Se ha creado el archivo {torrents_filename} en la ruta del script.")
 
     # Escribir los nombres de los archivos .mkv y .avi originales en el archivo media_filename
-    with open(os.path.join(program_dir, f'{media_filename}'), 'w', encoding='utf-8') as media_file:
+    with open(os.path.join(program_dir, f'{media_filename}'), 'w', encoding='ISO-8859-1') as media_file:
         for media_name in media_files:
             media_file.write(media_name + '\n')
 
