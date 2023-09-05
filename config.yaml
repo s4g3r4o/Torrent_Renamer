@@ -1,5 +1,5 @@
 # Configuración para el script de renombrar y copiar torrents
-source_folder: 'RUTA_DE_ORIGEN'
-dest_folder: 'RUTA_DE_DESTINO'
-torrents_filename: 'input.txt'
-media_filename: 'output.txt'
+source_folder: 'E:\Github\torrents\Cajon de Torrents'
+dest_folder: 'E:\Github\torrents_'
+torrents_filename: 'torrents_filename.txt'
+media_filename: 'media_filename.txt'
